@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { Box, Container, Unstable_Grid2 as Grid } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
+import { OverviewGrade } from 'src/sections/overview/overview-grade';
 
 const Page = () => (
   <>
@@ -22,11 +23,12 @@ const Page = () => (
           spacing={3}
         >
           <Grid
+            item
             xs={12}
-            sm={6}
-            lg={3}
+            sm={12}
+            lg={12}
           >
-            <p>Teste</p>
+            <OverviewGrade isMatutino={true}/>
           </Grid>
         </Grid>
       </Container>
