@@ -3,7 +3,45 @@ import { Box, Container, Unstable_Grid2 as Grid } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { OverviewGrade } from 'src/sections/overview/overview-grade';
 
-const Page = () => (
+const Page = () => {
+  const obj = [{
+    "aula1":"Segunda 8-10",
+    "aula2":"Quarta 10-12",
+    "escolhida":true,
+    "disciplinas":[
+       {
+          "disciplina":"Orientação a Objetos",
+          "professores":[
+            {
+              "nome": "Prof1",
+              "escolhida":false,
+            },
+            {
+              "nome": "Prof2",
+              "escolhida":false,
+            },
+          ],
+          "escolhida":true
+       },
+       {
+          "disciplina":"Redes",
+          "professores":[
+             "Prof3",
+             "Prof4"
+          ],
+          "escolhida":false
+       },
+       {
+          "disciplina":"Grafos",
+          "professores":[
+             "Prof4",
+             "Prof5"
+          ],
+          "escolhida":false
+       }
+    ]
+ }]
+  return (
   <>
     <Head>
       <title>
@@ -28,13 +66,15 @@ const Page = () => (
             sm={12}
             lg={12}
           >
-            <OverviewGrade isMatutino={true}/>
+            <OverviewGrade 
+            isMatutino={true} 
+            materias={obj}/>
           </Grid>
         </Grid>
       </Container>
     </Box>
   </>
-);
+)};
 
 Page.getLayout = (page) => (
   <DashboardLayout>

@@ -3,10 +3,13 @@ import PropTypes from 'prop-types';
 import { DisciplinaCard } from './disciplina-card';
 
 export const OverviewGrade = (props) => {
-  const { isMatutino } = props;
+  const { isMatutino, materias } = props;
   const dias = ["", "Segunda", "Terça", "Quarta", "Quinta", "Sexta"]
+  const comeco = isMatutino ? "8" : "19"
+  const intervalo = isMatutino ? "10" : "21"
+  const fim = isMatutino ? "12" : "23"
 
-  const renderMaterias = (index, horario) => {
+  const renderMaterias = (index, horario, disciplina) => {
     if(index === 0)
       return(
         <Grid
@@ -33,8 +36,16 @@ export const OverviewGrade = (props) => {
         lg={1}
         height={100}
       >
-        <DisciplinaCard disciplina={{nome: "Engenharia de Software", professores: "Fulana, Ciclana"}} />
+        <DisciplinaCard disciplina={{nome: disciplina?.disciplina, professores: disciplina?.professor}} />
       </Grid>)
+  }
+
+  const getDisciplina = (dia, comeco, fim) => {
+    const horario = dia + " " + comeco + "-" + fim
+    const disciplinas = materias.find(o => (o.aula1 === horario || o.aula2 === horario) && o.escolhida)?.disciplinas
+    const disciplina = disciplinas?.find(o => o.escolhida)
+    const professor = disciplina?.professores.find(o => o.escolhida)
+    return { disciplina: disciplina?.disciplina, professor: professor?.nome }
   }
 
   return (
@@ -66,7 +77,7 @@ export const OverviewGrade = (props) => {
         marginTop="8px"
       >
         {dias.map((dia, index) => (
-          renderMaterias(index, isMatutino ? "8:00" : "19:00")
+          renderMaterias(index, comeco + ":00", getDisciplina(dia, comeco, intervalo))
         ))}
       </Grid>
       <Grid
@@ -77,7 +88,7 @@ export const OverviewGrade = (props) => {
         marginTop="8px"
       >
         {dias.map((dia, index) => (
-          renderMaterias(index, isMatutino ? "10:00" : "21:00")
+          renderMaterias(index, intervalo + ":00", getDisciplina(dia, intervalo, fim))
         ))}
       </Grid>
     </>
