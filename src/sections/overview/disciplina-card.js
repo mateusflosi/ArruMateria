@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { Card, CardContent, Typography } from '@mui/material';
 
 export const DisciplinaCard = (props) => {
-  const { disciplina } = props;
+  const { disciplina, horario, onClick } = props;
 
   return (
     <Card
@@ -12,7 +12,9 @@ export const DisciplinaCard = (props) => {
         height: '100%',
         marginLeft: "1px",
         marginRight: "1px",
+        cursor: 'pointer'
       }}
+      onClick={() => onClick(disciplina.nome, horario)}
     >
       <CardContent>
         <Typography
@@ -33,5 +35,7 @@ export const DisciplinaCard = (props) => {
 };
 
 DisciplinaCard.propTypes = {
-  disciplina: PropTypes.object.isRequired
+  disciplina: PropTypes.object.isRequired,
+  horario: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired
 };
