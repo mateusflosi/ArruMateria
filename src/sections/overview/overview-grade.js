@@ -10,7 +10,7 @@ export const OverviewGrade = (props) => {
   const fim = isMatutino ? "12" : "23"
 
   const getDisciplina = (horario) => {
-    const disciplinas = materias.find(o => (o.aula1 === horario || o.aula2 === horario) && o.escolhida)?.disciplinas
+    const disciplinas = materias.find(o => o.aulas.includes(horario) && o.escolhida)?.disciplinas
     const disciplina = disciplinas?.find(o => o.escolhida)
     const professor = disciplina?.professores.find(o => o.escolhida)
     return { nome: disciplina?.disciplina, professores: professor?.nome }

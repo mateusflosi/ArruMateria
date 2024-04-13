@@ -11,8 +11,7 @@ const Page = () => {
   const [materia, setMateria] = useState(undefined)
   const [refresh, setRefresh] = useState(false)
   const [obj, setObj] = useState([{
-    "aula1":"Segunda 8-10",
-    "aula2":"Quarta 10-12",
+    "aulas": ["Segunda 8-10", "Quarta 10-12"],
     "escolhida":true,
     "disciplinas":[
        {
@@ -89,7 +88,7 @@ const Page = () => {
               isMatutino={true} 
               materias={obj}
               onClick={(disciplina, horario) => {
-                const newBloco = obj.find(o => (o.aula1 === horario || o.aula2 === horario) && o.escolhida)
+                const newBloco = obj.find(o => o.aulas.includes(horario) && o.escolhida)
                 setBloco(newBloco)
                 setMateria(newBloco?.disciplinas.find(o => o.disciplina == disciplina))
               }}
@@ -104,7 +103,7 @@ const Page = () => {
             <OverviewProfessores
               professores={materia?.professores ?? []}
               onClick={(professor) => {
-                const professores = obj.find(o => o.aula1 === bloco.aula1 && o.escolhida)
+                const professores = obj.find(o => o.aulas[0] === bloco.aulas[0] && o.escolhida)
                   .disciplinas.find(o => o.disciplina === materia.disciplina).professores
                 professores.forEach(o => {
                   o.escolhida = !o.escolhida && o.nome === professor
@@ -123,12 +122,8 @@ const Page = () => {
             <OverviewAlternativas
               alternativas={bloco?.disciplinas ?? []}
               onClick={(alternativa) => {
-                const blocoObj = obj.find(o => o.aula1 === bloco.aula1 && o.escolhida)
-                var escolhidaAnt = blocoObj.disciplinas.find(o => o.escolhida)
-                escolhidaAnt.escolhida = false
-                escolhidaAnt.professores.forEach(o => {
-                  o.escolhida = false
-                })
+                const blocoObj = obj.find(o => o.aulas[0] === bloco.aulas[0] && o.escolhida)
+                blocoObj.disciplinas.find(o => o.escolhida).escolhida = false
                 const newMateria = blocoObj.disciplinas.find(o => o.disciplina === alternativa)
                 newMateria.escolhida = true
                 setObj(obj)
