@@ -3,11 +3,13 @@ import Head from 'next/head';
 import { Box, Container, Unstable_Grid2 as Grid } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { OverviewGrade } from 'src/sections/overview/overview-grade';
+import { OverviewProfessores } from 'src/sections/overview/overview-professores';
 
 const Page = () => {
   const [bloco, setBloco] = useState(undefined);
   const [materia, setMateria] = useState(undefined)
-  const obj = [{
+  const [refresh, setRefresh] = useState(false)
+  const [obj, setObj] = useState([{
     "aula1":"Segunda 8-10",
     "aula2":"Quarta 10-12",
     "escolhida":true,
@@ -43,7 +45,7 @@ const Page = () => {
           "escolhida":false
        }
     ]
- }]
+  }])
 
   return (
   <>
@@ -71,13 +73,32 @@ const Page = () => {
             lg={12}
           >
             <OverviewGrade 
-            isMatutino={true} 
-            materias={obj}
-            onClick={(disciplina, horario) => {
-              const newBloco = obj.find(o => (o.aula1 === horario || o.aula2 === horario) && o.escolhida)
-              setBloco(newBloco)
-              setMateria(newBloco?.disciplinas.find(o => o.disciplina == disciplina))
-            }}
+              isMatutino={true} 
+              materias={obj}
+              onClick={(disciplina, horario) => {
+                const newBloco = obj.find(o => (o.aula1 === horario || o.aula2 === horario) && o.escolhida)
+                setBloco(newBloco)
+                setMateria(newBloco?.disciplinas.find(o => o.disciplina == disciplina))
+              }}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            sm={6}
+            lg={6}
+          >
+            <OverviewProfessores
+              professores={materia?.professores ?? []}
+              onClick={(professor) => {
+                const professores = obj.find(o => o.aula1 === bloco.aula1 && o.escolhida)
+                  .disciplinas.find(o => o.disciplina === materia.disciplina).professores
+                professores.forEach(o => {
+                  o.escolhida = !o.escolhida && o.nome === professor
+                })
+                setObj(obj)
+                setRefresh(!refresh)
+              }}
             />
           </Grid>
         </Grid>
