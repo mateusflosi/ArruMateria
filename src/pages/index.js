@@ -4,6 +4,7 @@ import { Box, Container, Unstable_Grid2 as Grid } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { OverviewGrade } from 'src/sections/overview/overview-grade';
 import { OverviewProfessores } from 'src/sections/overview/overview-professores';
+import { OverviewAlternativas } from 'src/sections/overview/overview-alternativas';
 
 const Page = () => {
   const [bloco, setBloco] = useState(undefined);
@@ -31,16 +32,28 @@ const Page = () => {
        {
           "disciplina":"Redes",
           "professores":[
-             "Prof3",
-             "Prof4"
+            {
+              "nome": "Prof3",
+              "escolhida":false,
+            },
+            {
+              "nome": "Prof4",
+              "escolhida":false,
+            },
           ],
           "escolhida":false
        },
        {
           "disciplina":"Grafos",
           "professores":[
-             "Prof4",
-             "Prof5"
+            {
+              "nome": "Prof5",
+              "escolhida":false,
+            },
+            {
+              "nome": "Prof6",
+              "escolhida":false,
+            },
           ],
           "escolhida":false
        }
@@ -98,6 +111,28 @@ const Page = () => {
                 })
                 setObj(obj)
                 setRefresh(!refresh)
+              }}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            sm={6}
+            lg={6}
+          >
+            <OverviewAlternativas
+              alternativas={bloco?.disciplinas ?? []}
+              onClick={(alternativa) => {
+                const blocoObj = obj.find(o => o.aula1 === bloco.aula1 && o.escolhida)
+                var escolhidaAnt = blocoObj.disciplinas.find(o => o.escolhida)
+                escolhidaAnt.escolhida = false
+                escolhidaAnt.professores.forEach(o => {
+                  o.escolhida = false
+                })
+                const newMateria = blocoObj.disciplinas.find(o => o.disciplina === alternativa)
+                newMateria.escolhida = true
+                setObj(obj)
+                setMateria(newMateria)
               }}
             />
           </Grid>
