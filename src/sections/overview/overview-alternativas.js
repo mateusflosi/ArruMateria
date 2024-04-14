@@ -5,28 +5,31 @@ export const OverviewAlternativas = (props) => {
   const { alternativas, onClick } = props;
   return (
     <>
-      {alternativas.filter(o => !o.escolhida).map((alternativa, index) => (
-        <Card
-          key={index} 
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            height: '100%',
-            marginLeft: "1px",
-            marginRight: "1px",
-            cursor: 'pointer',
-            justifyContent: "center",
-            marginTop: '8px'
-          }}
-          onClick={() => onClick(alternativa.disciplina)}
-        >
-          <Typography 
-            align="center"
-            fontSize={20}>
-              {alternativa.disciplina}
-          </Typography>
-        </Card>
-        ))}
+      {alternativas
+        .map((bloco, index1) => 
+          bloco.disciplinas
+          .map((alternativa, index2) => (
+            <Card
+              key={index1 + "-" + index2} 
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%',
+                marginLeft: "1px",
+                marginRight: "1px",
+                cursor: 'pointer',
+                justifyContent: "center",
+                marginTop: '8px'
+              }}
+              onClick={() => onClick(bloco, alternativa.disciplina)}
+            >
+              <Typography 
+                align="center"
+                fontSize={20}>
+                  {alternativa.disciplina}
+              </Typography>
+            </Card>
+          )))}
     </>
   );
 };

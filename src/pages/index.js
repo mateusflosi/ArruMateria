@@ -7,6 +7,7 @@ import { OverviewProfessores } from 'src/sections/overview/overview-professores'
 import { OverviewAlternativas } from 'src/sections/overview/overview-alternativas';
 
 const Page = () => {
+  const [isMatutino, setMatutino] = useState(true)
   const [bloco, setBloco] = useState(undefined);
   const [materia, setMateria] = useState(undefined)
   const [refresh, setRefresh] = useState(false)
@@ -57,7 +58,101 @@ const Page = () => {
           "escolhida":false
        }
     ]
-  }])
+  },
+  {
+    "aulas": ["Segunda 8-10"],
+    "escolhida": false,
+    "disciplinas":[
+       {
+          "disciplina":"Computador, Ética e Sociedade",
+          "professores":[
+            {
+              "nome": "Prof7",
+              "escolhida":false,
+            },
+            {
+              "nome": "Prof8",
+              "escolhida":false,
+            },
+          ],
+          "escolhida":false
+       }
+    ]
+  }
+  ])
+
+  const getHorarios = () => {
+    const array = []
+    const dias = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta"]
+    const comeco = isMatutino ? "8" : "19"
+    const intervalo = isMatutino ? "10" : "21"
+    const fim = isMatutino ? "12" : "23"
+
+    dias.forEach(dia => {
+      array.push(dia + " " + comeco + "-" + intervalo)
+      array.push(dia + " " + intervalo + "-" + fim)
+    })
+
+    return array
+  }
+
+  const getHorariosLivres = () => {
+    const array = []
+    const horarios = getHorarios()
+    const horariosOcupados = obj
+      .filter(o => o.escolhida)
+      .map(o => o.aulas)
+      .reduce((atual, array) => array.concat(atual), [])
+
+    horarios.forEach(o => {
+      if(!horariosOcupados.includes(o))
+        array.push(o)
+    })
+
+    return array.concat(bloco.aulas)
+  }
+
+  const checkHoraios = (aulas, horariosLivres) => {
+    var retorno = true
+    aulas.forEach(o => {
+      if(!horariosLivres.includes(o))
+        retorno = false
+    })
+
+    return retorno
+  }
+
+  const filtraBloco = (bloco, disciplinasEscolhidas) => {
+    const blocoSemRef = JSON.parse(JSON.stringify(bloco))
+    blocoSemRef.disciplinas = blocoSemRef.disciplinas
+      .filter(o => !disciplinasEscolhidas.includes(o.disciplina))
+    return blocoSemRef
+  }
+
+  const getAlternativas = () => {
+    if(!bloco) return []
+
+    var disciplinasEscolhidas = obj
+      .filter(o => o.escolhida)
+      .map(o => o.disciplinas)
+      .reduce((atual, array) => array.concat(atual), [])
+      .filter(o => o.escolhida)
+      .map(o => o.disciplina)
+    const alternativas = [filtraBloco(bloco, disciplinasEscolhidas)]
+    const horariosLivres = getHorariosLivres()
+
+    obj
+      .filter(o => !o.escolhida && checkHoraios(o.aulas, horariosLivres))
+      .forEach(bloco => {
+        const blocoSemRef = filtraBloco(bloco, disciplinasEscolhidas)
+        if(blocoSemRef.disciplinas.length > 0){
+          alternativas.push(blocoSemRef)
+          disciplinasEscolhidas = disciplinasEscolhidas.concat(blocoSemRef.disciplinas)
+        }
+      })
+
+    return alternativas
+  }
 
   return (
   <>
@@ -85,7 +180,7 @@ const Page = () => {
             lg={12}
           >
             <OverviewGrade 
-              isMatutino={true} 
+              isMatutino={isMatutino} 
               materias={obj}
               onClick={(disciplina, horario) => {
                 const newBloco = obj.find(o => o.aulas.includes(horario) && o.escolhida)
@@ -103,12 +198,11 @@ const Page = () => {
             <OverviewProfessores
               professores={materia?.professores ?? []}
               onClick={(professor) => {
-                const professores = obj.find(o => o.aulas[0] === bloco.aulas[0] && o.escolhida)
+                const professores = bloco
                   .disciplinas.find(o => o.disciplina === materia.disciplina).professores
                 professores.forEach(o => {
                   o.escolhida = !o.escolhida && o.nome === professor
                 })
-                setObj(obj)
                 setRefresh(!refresh)
               }}
             />
@@ -120,14 +214,16 @@ const Page = () => {
             lg={6}
           >
             <OverviewAlternativas
-              alternativas={bloco?.disciplinas ?? []}
-              onClick={(alternativa) => {
-                const blocoObj = obj.find(o => o.aulas[0] === bloco.aulas[0] && o.escolhida)
-                blocoObj.disciplinas.find(o => o.escolhida).escolhida = false
+              alternativas={getAlternativas()}
+              onClick={(newBloco, alternativa) => {
+                bloco.disciplinas.find(o => o.escolhida).escolhida = false
+                bloco.escolhida = false
+                const blocoObj = obj.find(o => JSON.stringify(o.aulas) === JSON.stringify(newBloco.aulas))
+                blocoObj.escolhida = true
                 const newMateria = blocoObj.disciplinas.find(o => o.disciplina === alternativa)
                 newMateria.escolhida = true
-                setObj(obj)
                 setMateria(newMateria)
+                setBloco(blocoObj)
               }}
             />
           </Grid>
