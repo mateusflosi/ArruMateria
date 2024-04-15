@@ -3,8 +3,13 @@ import PropTypes from 'prop-types';
 
 export const OverviewAlternativas = (props) => {
   const { alternativas, onClick } = props;
-  return (
-    <>
+
+  if(alternativas.length === 0)
+    return <></>
+  
+    return (
+    <Card sx={{height:"456px", backgroundColor: '#E9E8E8'}} >
+      <Typography sx={{marginLeft: '16px', marginTop: '16px', fontSize: '24px'}}>Alternativas</Typography>
       {alternativas
         .map((bloco, index1) => 
           bloco.disciplinas
@@ -19,7 +24,10 @@ export const OverviewAlternativas = (props) => {
                 marginRight: "1px",
                 cursor: 'pointer',
                 justifyContent: "center",
-                marginTop: '8px'
+                marginTop: '16px',
+                height: '64px',
+                marginLeft: '8px',
+                marginRight: '8px'
               }}
               onClick={() => onClick(bloco, alternativa.disciplina)}
             >
@@ -30,7 +38,7 @@ export const OverviewAlternativas = (props) => {
               </Typography>
             </Card>
           )))}
-    </>
+    </Card>
   );
 };
 

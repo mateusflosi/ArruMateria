@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@mui/material';
+import { Grid, Typography, Card } from '@mui/material';
 import PropTypes from 'prop-types';
 import { DisciplinaCard } from './disciplina-card';
 
@@ -51,7 +51,8 @@ export const OverviewGrade = (props) => {
   }
 
   return (
-    <>
+    <Card sx={{backgroundColor: '#E9E8E8'}}>
+      <Typography sx={{marginLeft: '16px', marginTop: '16px', fontSize: '24px'}}>Grade</Typography>
       <Grid
         container
         direction="row"
@@ -76,7 +77,8 @@ export const OverviewGrade = (props) => {
         direction="row"
         justifyContent="space-around"
         columns={dias.length}
-        marginTop="8px"
+        marginTop="4px"
+        marginBottom="8px"
       >
         {dias.map((dia, index) => (
           renderMaterias(index, dia, comeco, intervalo)
@@ -87,13 +89,14 @@ export const OverviewGrade = (props) => {
         direction="row"
         justifyContent="space-around"
         columns={dias.length}
-        marginTop="8px"
+        marginTop="4px"
+        marginBottom="16px"
       >
         {dias.map((dia, index) => (
           renderMaterias(index, dia, intervalo, fim)
         ))}
       </Grid>
-    </>
+    </Card>
   );
 };
 

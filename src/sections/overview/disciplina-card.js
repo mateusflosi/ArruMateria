@@ -10,8 +10,7 @@ export const DisciplinaCard = (props) => {
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
-        marginLeft: "1px",
-        marginRight: "1px",
+        marginRight: "8px",
         cursor: 'pointer'
       }}
       onClick={() => onClick(disciplina.nome, horario)}

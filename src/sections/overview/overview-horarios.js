@@ -3,8 +3,13 @@ import PropTypes from 'prop-types';
 
 export const OverviewHorarios = (props) => {
   const { horarios, onClick } = props;
+
+  if(horarios.length === 0)
+    return <></>
+
   return (
-    <>
+    <Card sx={{height:"224px", marginTop: "8px", backgroundColor: '#E9E8E8'}} >
+      <Typography sx={{marginLeft: '16px', marginTop: '16px', fontSize: '24px'}}>Outros horários</Typography>
       {horarios.map((horario, index) => (
         <Card
           key={index} 
@@ -16,7 +21,10 @@ export const OverviewHorarios = (props) => {
             marginRight: "1px",
             cursor: 'pointer',
             justifyContent: "center",
-            marginTop: '8px'
+            marginTop: '8px',
+            height: '48px',
+            marginLeft: '8px',
+            marginRight: '8px'
           }}
           onClick={() => onClick(horario)}
         >
@@ -27,7 +35,7 @@ export const OverviewHorarios = (props) => {
           </Typography>
         </Card>
         ))}
-    </>
+    </Card>
   );
 };
 
