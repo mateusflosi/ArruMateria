@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { DisciplinaCard } from './disciplina-card';
 
 export const OverviewGrade = (props) => {
-  const { isMatutino, materias, onClick } = props;
+  const { isMatutino, materias, selected, onClick } = props;
   const dias = ["", "Segunda", "Terça", "Quarta", "Quinta", "Sexta"]
   const comeco = isMatutino ? "8" : "19"
   const intervalo = isMatutino ? "10" : "21"
@@ -45,6 +45,7 @@ export const OverviewGrade = (props) => {
       >
         <DisciplinaCard 
           disciplina={getDisciplina(horario)}
+          selected={selected}
           horario={horario}
           onClick={onClick} />
       </Grid>)
@@ -103,5 +104,6 @@ export const OverviewGrade = (props) => {
 OverviewGrade.propTypes = {
   isMatutino: PropTypes.bool.isRequired,
   materias: PropTypes.array.isRequired,
-  onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired,
+  selected: PropTypes.object.isRequired
 };

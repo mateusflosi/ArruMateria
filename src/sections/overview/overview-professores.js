@@ -24,7 +24,8 @@ export const OverviewProfessores = (props) => {
             marginTop: '8px',
             height: '48px',
             marginLeft: '8px',
-            marginRight: '8px'
+            marginRight: '8px',
+            border: professor.escolhida ? '2px solid black' : ''
           }}
           onClick={() => onClick(professor.nome)}
         >

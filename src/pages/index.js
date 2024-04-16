@@ -233,11 +233,14 @@ const Page = () => {
           >
             <OverviewGrade 
               isMatutino={isMatutino} 
+              selected={materia}
               materias={obj}
               onClick={(disciplina, horario) => {
                 const newBloco = obj.find(o => o.aulas.includes(horario) && o.escolhida)
-                setBloco(newBloco)
-                setMateria(newBloco?.disciplinas.find(o => o.disciplina == disciplina))
+                const newMateria = newBloco?.disciplinas.find(o => o.disciplina == disciplina)
+                const isEqual = JSON.stringify(newMateria) === JSON.stringify(materia)
+                setBloco(isEqual ? undefined :newBloco)
+                setMateria(isEqual ? undefined : newMateria)
               }}
             />
           </Grid>
