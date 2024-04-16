@@ -12,6 +12,7 @@ export const DisciplinaCard = (props) => {
         height: '100%',
         marginRight: "8px",
         cursor: 'pointer',
+        backgroundColor: disciplina.cor,
         border: selected && selected.disciplina === disciplina.nome ? '2px solid black' : ''
       }}
       onClick={() => onClick(disciplina.nome, horario)}

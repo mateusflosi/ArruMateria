@@ -8,12 +8,18 @@ export const OverviewGrade = (props) => {
   const comeco = isMatutino ? "8" : "19"
   const intervalo = isMatutino ? "10" : "21"
   const fim = isMatutino ? "12" : "23"
+  const cores = ["#87CEFA", "#66CDAA", "#3CB371", "#CD853F", "#FFDEAD", "#EE82EE", "#FA8072", "#F0E68C", "#FF69B4", "#6A5ACD"]
+  
+  const materiasResumo = materias.filter(o => o.escolhida).map((o, index) => ({
+    aulas: o.aulas,
+    disciplina: o.disciplinas.find(o => o.escolhida),
+    cor: cores[index]
+  }))
 
   const getDisciplina = (horario) => {
-    const disciplinas = materias.find(o => o.aulas.includes(horario) && o.escolhida)?.disciplinas
-    const disciplina = disciplinas?.find(o => o.escolhida)
-    const professor = disciplina?.professores.find(o => o.escolhida)
-    return { nome: disciplina?.disciplina, professores: professor?.nome }
+    const disciplina = materiasResumo.find(o => o.aulas.includes(horario))
+    const professor = disciplina?.disciplina.professores.find(o => o.escolhida)
+    return { nome: disciplina?.disciplina.disciplina, professores: professor?.nome, cor: disciplina?.cor }
   }
 
   const renderMaterias = (index, dia, comeco, fim) => {
