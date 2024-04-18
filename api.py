@@ -46,7 +46,7 @@ def filtrarPorCursoTurno(idCurso, turno, paramCampus):
         y = 'SA'
     else: y = 'SB'
     apresentarFinal2 = f'''
-        (SELECT * FROM "public"."Horário das Turmas" t1 WHERE LEFT(t1."Código_Turma",1) = '{x}' AND RIGHT(t1."Código_Turma", 2) = '{y}')
+        (SELECT DISTINCT * FROM "public"."Horário das Turmas" t1 WHERE LEFT(t1."Código_Turma",1) = '{x}' AND RIGHT(t1."Código_Turma", 2) = '{y}')
         '''.format(x, y)
     horarios = psql.read_sql(apresentarFinal2, conn)
 
@@ -103,8 +103,8 @@ def filtrarPorCursoTurno(idCurso, turno, paramCampus):
     dictIncompativeis = {}
     #cada chave é uma disciplina, cada valor de chave é um vetor com as disciplinas que possuem o mesmo horário e dia
     for i in disciplinasCurso.itertuples():
-        sigla = i[2]
-        aparicoesSigla = turmas[turmas["CÓDIGO DE TURMA"].str.contains(sigla)]["CÓDIGO DE TURMA"].unique()
+        sigla = i[1]
+        aparicoesSigla = turmas[turmas["TURMA"].str.contains(sigla)]["CÓDIGO DE TURMA"].unique()
 
         for j in aparicoesSigla:
             incompativeis.append(j)
