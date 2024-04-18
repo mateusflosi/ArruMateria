@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 export const OverviewAlternativas = (props) => {
   const { alternativas, onClick } = props;
 
-  if(alternativas.length === 0)
+  console.log(alternativas)
+  if(alternativas.length === 0 || (alternativas.length === 1 && alternativas[0].disciplinas.length === 0))
     return <></>
   
     return (
