@@ -147,13 +147,15 @@ def filtrarPorCursoTurno(idCurso, turno, paramCampus):
                 if 12 < int(m.Horário) <19:
                     tarde = 1
                     break 
-                dictAux["aulas"].append("{} {}-{}".format(m.Dia_Semana,m.Horário,m[4]))
+                inicio = m.Horário
+                if(inicio == "08"):
+                    inicio = "8"
+                dictAux["aulas"].append("{} {}-{}".format(m.Dia_Semana.title(),inicio,m[4]))
                 i+=1
             if tarde == 1:
                 continue
             dictAux["escolhida"] = True & val
             dictAux["disciplinas"] = []
-            a = 0
             for n in vetorDisciplinasCompativeis[l]:
                 localizarTurma = turmas.loc[turmas["CÓDIGO DE TURMA"]==n]
                 if localizarTurma.empty:
@@ -161,28 +163,32 @@ def filtrarPorCursoTurno(idCurso, turno, paramCampus):
                 nome = localizarTurma.iloc[0]["TURMA"]
                 traco = nome[:nome.find("-")].rfind(" ")
                 subNome = nome[:traco]
-                dictAux["disciplinas"].append({"disciplina":"{}".format(subNome),
-                                                "professores":[]})
-                if(len(dictAux["disciplinas"])==1):
-                    dictAux["disciplinas"][0]["escolhida"] = True & val
+                disciplinasJaColocadas = [x["disciplina"] for x in dictAux["disciplinas"]]
+
+                index = 0
+                if(subNome not in disciplinasJaColocadas):
+                    index = len(dictAux["disciplinas"])
+                    dictAux["disciplinas"].append({"disciplina":"{}".format(subNome),
+                                                    "professores":[]})
+                    if(len(dictAux["disciplinas"])==1):
+                        dictAux["disciplinas"][0]["escolhida"] = True & val
+                    else:
+                        dictAux["disciplinas"][len(dictAux["disciplinas"])-1]["escolhida"] = False & val
                 else:
-                    dictAux["disciplinas"][len(dictAux["disciplinas"])-1]["escolhida"] = False & val
+                    index = disciplinasJaColocadas.index(subNome)
                 
-                nomesColocar = []
+                nomesColocar = str("")
                 
                 for i in range(8,12):
-                    nome = localizarTurma.iloc[0][i]
-                    if((nome != None) & (nome not in nomesColocar)):
-                        nomesColocar.append(nome)
+                    nome = str(localizarTurma.iloc[0][i])
+                    if((nome != 'None') & (nome not in nomesColocar)):
+                        nomesColocar = nomesColocar + ", " + nome
                         #dictAux["disciplinas"][a]["professores"].append("{}".format(nome))
-                print(nomesColocar)
-                for name in nomesColocar:
-                    print(name)
-                    dictAux2 = {}
-                    dictAux2["nome"] = name
-                    dictAux2["escolhida"] = False & val
-                    dictAux["disciplinas"][a]["professores"].append(dictAux2)
-                a+=1
+                #print(nomesColocar)
+                dictAux2 = {}
+                dictAux2["nome"] = nomesColocar[2:]
+                dictAux2["escolhida"] = False & val
+                dictAux["disciplinas"][index]["professores"].append(dictAux2)
             vetDicioRetorno.append(dictAux)
         return(vetDicioRetorno)
     aqui = dicio(vetorDisciplinasCompativeis, True)
@@ -203,8 +209,7 @@ def retorno():
     curso = request.args.get("curso")
     turno = request.args.get("turno")
     campus = request.args.get("campus")
-    papapa = filtrarPorCursoTurno(curso,turno,campus)
-    return papapa
+    return filtrarPorCursoTurno(curso,turno,campus)
     # retorno = filtrarPorCursoTurno(curso, turno, campus)
     # return retorno
 
