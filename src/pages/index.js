@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { Box, Container, Unstable_Grid2 as Grid } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
@@ -12,123 +12,17 @@ const Page = () => {
   const [bloco, setBloco] = useState(undefined);
   const [materia, setMateria] = useState(undefined)
   const [refresh, setRefresh] = useState(false)
-  const [obj, setObj] = useState([{
-    "aulas": ["Segunda 8-10", "Quarta 10-12"],
-    "escolhida":true,
-    "disciplinas":[
-       {
-          "disciplina":"Orientação a Objetos",
-          "professores":[
-            {
-              "nome": "Prof1",
-              "escolhida":false,
-            },
-            {
-              "nome": "Prof2",
-              "escolhida":false,
-            },
-          ],
-          "escolhida":true
-       },
-       {
-          "disciplina":"Redes",
-          "professores":[
-            {
-              "nome": "Prof3",
-              "escolhida":false,
-            },
-            {
-              "nome": "Prof4",
-              "escolhida":false,
-            },
-          ],
-          "escolhida":false
-       },
-       {
-          "disciplina":"Grafos",
-          "professores":[
-            {
-              "nome": "Prof5",
-              "escolhida":false,
-            },
-            {
-              "nome": "Prof6",
-              "escolhida":false,
-            },
-          ],
-          "escolhida":false
-       }
-    ]
-  },
-  {
-    "aulas": ["Segunda 8-10"],
-    "escolhida": false,
-    "disciplinas":[
-       {
-          "disciplina":"Computador, Ética e Sociedade",
-          "professores":[
-            {
-              "nome": "Prof7",
-              "escolhida":false,
-            },
-            {
-              "nome": "Prof8",
-              "escolhida":false,
-            },
-          ],
-          "escolhida":false
-       }
-    ]
-  },
-  {
-    "aulas": ["Segunda 10-12", "Quarta 8-10"],
-    "escolhida":true,
-    "disciplinas":[
-       {
-          "disciplina":"Orientação a Objetos",
-          "professores":[
-            {
-              "nome": "Prof1",
-              "escolhida":false,
-            },
-            {
-              "nome": "Prof2",
-              "escolhida":false,
-            },
-          ],
-          "escolhida":false
-       },
-       {
-          "disciplina":"Redes",
-          "professores":[
-            {
-              "nome": "Prof3",
-              "escolhida":false,
-            },
-            {
-              "nome": "Prof4",
-              "escolhida":false,
-            },
-          ],
-          "escolhida":true
-       },
-       {
-          "disciplina":"Grafos",
-          "professores":[
-            {
-              "nome": "Prof5",
-              "escolhida":false,
-            },
-            {
-              "nome": "Prof6",
-              "escolhida":false,
-            },
-          ],
-          "escolhida":false
-       }
-    ]
-  },
-  ])
+  const [obj, setObj] = useState([])
+
+  useEffect(() => {
+      const request = new XMLHttpRequest()
+      request.open("GET", "http://127.0.0.1:5000/parametros/?curso=1&turno=diurno&campus=Santo André", false)
+      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+      request.setRequestHeader('Access-Control-Allow-Origin', '*');
+      request.setRequestHeader('Accept', '*/*');
+      request.send()
+      setObj(JSON.parse(request.responseText))
+    },[]);
 
   const getHorarios = () => {
     const array = []

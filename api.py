@@ -1,9 +1,13 @@
 from flask import Flask, request
+from flask_cors import CORS, cross_origin
 import pandas as pd
 import json
 import psycopg2
 import pandas.io.sql as psql
 
+app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 #Preencher com os parametros do database do elephantsql
 db_params = {
@@ -198,13 +202,14 @@ def filtrarPorCursoTurno(idCurso, turno, paramCampus):
 
 ######################################################### A P I ############################################################################
 
-app = Flask(__name__)
 @app.route('/')
+@cross_origin()
 def index():
     texto = "Aqui seria a tela de login. Passar /parametros/?curso=1&turno=diurno&campus=Santo André na URL após o localhost para acessar o json. Pode demorar alguns segundos.\n além disso, da pra colocar turno noturno e campus São Bernardo do Campo"
     return texto
 
 @app.route('/parametros/', methods = ["Get"])
+@cross_origin()
 def retorno():
     curso = request.args.get("curso")
     turno = request.args.get("turno")
