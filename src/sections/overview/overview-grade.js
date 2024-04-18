@@ -8,7 +8,7 @@ export const OverviewGrade = (props) => {
   const comeco = isMatutino ? "8" : "19"
   const intervalo = isMatutino ? "10" : "21"
   const fim = isMatutino ? "12" : "23"
-  const cores = ["#87CEFA", "#66CDAA", "#3CB371", "#CD853F", "#FFDEAD", "#EE82EE", "#FA8072", "#F0E68C", "#FF69B4", "#6A5ACD"]
+  const cores = ["#87CEFA", "#EE82EE", "#3CB371", "#CD853F", "#FFDEAD", "#66CDAA", "#FA8072", "#F0E68C", "#FF69B4", "#6A5ACD"]
   
   const materiasResumo = materias.filter(o => o.escolhida).map((o, index) => ({
     aulas: o.aulas,

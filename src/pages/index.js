@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
-import { Box, Container, Unstable_Grid2 as Grid } from '@mui/material';
+import { Box, Container, CircularProgress, Grid } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { OverviewGrade } from 'src/sections/overview/overview-grade';
 import { OverviewProfessores } from 'src/sections/overview/overview-professores';
@@ -9,6 +9,7 @@ import { OverviewHorarios } from 'src/sections/overview/overview-horarios';
 
 const Page = () => {
   const [isMatutino, setMatutino] = useState(true)
+  const [isLoading, setLoading] = useState(true)
   const [bloco, setBloco] = useState(undefined);
   const [materia, setMateria] = useState(undefined)
   const [refresh, setRefresh] = useState(false)
@@ -22,6 +23,7 @@ const Page = () => {
       request.setRequestHeader('Accept', '*/*');
       request.send()
       setObj(JSON.parse(request.responseText))
+      setLoading(false)
     },[]);
 
   const getHorarios = () => {
@@ -125,18 +127,29 @@ const Page = () => {
             sm={12}
             lg={12}
           >
-            <OverviewGrade 
-              isMatutino={isMatutino} 
-              selected={materia}
-              materias={obj}
-              onClick={(disciplina, horario) => {
-                const newBloco = obj.find(o => o.aulas.includes(horario) && o.escolhida)
-                const newMateria = newBloco?.disciplinas.find(o => o.disciplina == disciplina)
-                const isEqual = JSON.stringify(newMateria) === JSON.stringify(materia)
-                setBloco(isEqual ? undefined :newBloco)
-                setMateria(isEqual ? undefined : newMateria)
-              }}
-            />
+            {isLoading ?
+              <Grid
+              item
+              xs={12}
+              sm={12}
+              lg={12}
+              sx={{textAlign: 'center'}}
+            >
+              <CircularProgress disableShrink />
+            </Grid>
+              : 
+              <OverviewGrade 
+                isMatutino={isMatutino} 
+                selected={materia}
+                materias={obj}
+                onClick={(disciplina, horario) => {
+                  const newBloco = obj.find(o => o.aulas.includes(horario) && o.escolhida)
+                  const newMateria = newBloco?.disciplinas.find(o => o.disciplina == disciplina)
+                  const isEqual = JSON.stringify(newMateria) === JSON.stringify(materia)
+                  setBloco(isEqual ? undefined :newBloco)
+                  setMateria(isEqual ? undefined : newMateria)
+                }}
+              />}
           </Grid>
           <Grid
             item
