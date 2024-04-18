@@ -47,7 +47,7 @@ export const OverviewGrade = (props) => {
         xs={1}
         sm={1}
         lg={1}
-        height={100}
+        height={160}
       >
         <DisciplinaCard 
           disciplina={getDisciplina(horario)}
