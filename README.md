@@ -19,3 +19,11 @@ Ex: pip install flask_cors
 Para subir o servidor de api só executar python3 api.py
 
 ##### Importante que a interface e api estejam rodando em dois CMD's diferentes e ao mesmo tempo. 
+
+### Execução dos testes
+
+Instalar as libs necessários com pio install
+
+Ex: pip install pytest
+
+Para rodar o teste só executar python3 test.py
