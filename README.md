@@ -22,7 +22,7 @@ Para subir o servidor de api só executar python3 api.py
 
 ### Execução dos testes
 
-Instalar as libs necessários com pio install
+Instalar as libs necessárias com pip install
 
 Ex: pip install pytest
 
